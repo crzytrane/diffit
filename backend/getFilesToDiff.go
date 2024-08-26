@@ -19,7 +19,6 @@ type ToDiff struct {
 
 func fileExists(baseDir string, dirEntry fs.DirEntry) bool {
 	filepath := baseDir + dirEntry.Name()
-	// fmt.Printf("fileExits baseDir = %s, dirEntry.Name() = %s fullPath = %s \n", baseDir, dirEntry.Name(), filepath)
 	_, err := os.Stat(filepath)
 	return !errors.Is(err, os.ErrNotExist)
 }
