@@ -32,6 +32,17 @@ func main() {
 		fmt.Printf("Base: %s, Feature: %s\n", file.basePath, file.featurePath)
 	}
 
+	// make the diffs actually work off the diff objects
+	// 
+
+  for _, diff := range files {
+    result, err := DiffImage(diff, DiffOptions{Threshold: 0.1})
+    if err != nil {
+      log.Fatalf("Something wen't wrong")
+    }
+    fmt.Printf("Result: %t", result.IsEqual)
+  }
+
 	os.Exit(0)
 	// diff files
 	// report differences
