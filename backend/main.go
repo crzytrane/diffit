@@ -32,8 +32,6 @@ func main() {
 		fmt.Printf("Base: %s, Feature: %s\n", file.basePath, file.featurePath)
 	}
 
-	// TODO need to check if the above GetFilesFromDirectory handles subdirectories or not
-
 	os.Exit(0)
 	// diff files
 	// report differences
