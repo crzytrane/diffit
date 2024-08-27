@@ -33,7 +33,7 @@ func main() {
 	}
 
 	// make the diffs actually work off the diff objects
-	// 
+	//
 
   for _, diff := range files {
     result, err := DiffImage(diff, DiffOptions{Threshold: 0.1})
