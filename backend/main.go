@@ -19,29 +19,30 @@ import (
 func main() {
 	baseDir := "./testing/base/"
 	featureDir := "./testing/feature/"
+	diffDir := "./testing/diff/"
 
 	// collect files
 	directory := FromDirectoryOptions{
 		baseDir:    baseDir,
 		featureDir: featureDir,
+		diffDir:    diffDir,
 	}
 
 	files, err := GetDiffsFromDirectory(directory)
 
-	for _, file := range files {
-		fmt.Printf("Base: %s, Feature: %s\n", file.basePath, file.featurePath)
-	}
+	// for _, file := range files {
+	// 	fmt.Printf("Base: %s, Feature: %s\n", file.basePath, file.featurePath)
+	// }
 
 	// make the diffs actually work off the diff objects
-	//
 
-  for _, diff := range files {
-    result, err := DiffImage(diff, DiffOptions{Threshold: 0.1})
-    if err != nil {
-      log.Fatalf("Something wen't wrong")
-    }
-    fmt.Printf("Result: %t", result.IsEqual)
-  }
+	for _, diff := range files {
+		_, err := DiffImage(diff, DiffOptions{Threshold: 0.1})
+		if err != nil {
+			log.Fatalf("Something wen't wrong")
+		}
+		// fmt.Printf("Result: %t\n", result.IsEqual)
+	}
 
 	os.Exit(0)
 	// diff files

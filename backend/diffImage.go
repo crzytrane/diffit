@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -24,10 +25,13 @@ type DiffOptions struct {
 }
 
 func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
-	outputPath := "/home/mark/projects/diffit/backend/output.png"
 	result := DiffResult{
 		Input:   toDiff,
 		IsEqual: false,
+	}
+
+	if (toDiff.basePath != "" && toDiff.featurePath == "") || (toDiff.basePath == "" && toDiff.featurePath != "") {
+		return DiffResult{}, nil
 	}
 
 	file1, err := os.Open(toDiff.basePath)
@@ -60,13 +64,21 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 
 	if resultDiff.Equal {
 		result.IsEqual = true
+		return result, nil
 	}
 
 	enc := &png.Encoder{
 		CompressionLevel: png.BestSpeed,
 	}
 
-	f, _ := os.Create(outputPath)
+  fmt.Printf("Diff written to: %s\n", toDiff.diffPath)
+
+  os.MkdirAll(toDiff.diffDir, 0755)
+
+	f, err := os.Create(toDiff.diffPath)
+  if err != nil {
+    return DiffResult{}, err
+  }
 
 	writer := bufio.NewWriter(f)
 

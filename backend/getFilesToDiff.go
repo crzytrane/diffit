@@ -10,11 +10,14 @@ import (
 type FromDirectoryOptions struct {
 	baseDir    string
 	featureDir string
+	diffDir    string
 }
 
 type ToDiff struct {
 	basePath    string
 	featurePath string
+	diffPath    string
+	diffDir    string
 }
 
 func fileExists(baseDir string, dirEntry fs.DirEntry) bool {
@@ -55,7 +58,7 @@ func dedupe(slice []ToDiff) []ToDiff {
 	return list
 }
 
-func Merge[T any](arr1 *[]T, arr2 *[]T) *[]T {
+func merge[T any](arr1 *[]T, arr2 *[]T) *[]T {
 	allFiles := make([]T, len(*arr1)+len(*arr2))
 	copy(allFiles[:], (*arr1)[:])
 	copy(allFiles[len(*arr1):], (*arr2)[:])
@@ -79,7 +82,7 @@ func GetDiffsFromDirectory(options FromDirectoryOptions) ([]ToDiff, error) {
 
 	results := []ToDiff{}
 
-	allFiles := *Merge(&baseFiles, &featureFiles)
+	allFiles := *merge(&baseFiles, &featureFiles)
 
 	for _, file := range allFiles {
 		fileExistsInBaseDir := fileExists(options.baseDir, file)
@@ -90,6 +93,8 @@ func GetDiffsFromDirectory(options FromDirectoryOptions) ([]ToDiff, error) {
 			diff := ToDiff{
 				basePath:    options.baseDir + file.Name(),
 				featurePath: options.featureDir + file.Name(),
+				diffPath:    options.diffDir + file.Name(),
+        diffDir: options.diffDir,
 			}
 			results = append(results, diff)
 		} else if fileExistsInBaseDir {
@@ -108,12 +113,13 @@ func GetDiffsFromDirectory(options FromDirectoryOptions) ([]ToDiff, error) {
 	baseFilesDirs := filterOutFiles(allBaseFiles)
 	featureFilesDirs := filterOutFiles(allFeatureFiles)
 
-	allDirs := *Merge(&baseFilesDirs, &featureFilesDirs)
+	allDirs := *merge(&baseFilesDirs, &featureFilesDirs)
 
 	for _, folder := range allDirs {
 		diff, err := GetDiffsFromDirectory(FromDirectoryOptions{
 			baseDir:    options.baseDir + folder.Name() + "/",
 			featureDir: options.featureDir + folder.Name() + "/",
+			diffDir:    options.diffDir + folder.Name() + "/",
 		})
 		if err != nil {
 			return nil, err
