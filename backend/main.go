@@ -9,7 +9,6 @@ func main() {
 	featureDir := "./testing/feature/"
 	diffDir := "./testing/diff/"
 
-	// collect files
 	directory := FromDirectoryOptions{
 		baseDir:    baseDir,
 		featureDir: featureDir,
