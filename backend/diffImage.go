@@ -74,14 +74,14 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 		CompressionLevel: png.BestSpeed,
 	}
 
-  fmt.Printf("Diff written to: %s\n", toDiff.diffPath)
+	fmt.Printf("Diff written to: %s\n", toDiff.diffPath)
 
-  os.MkdirAll(toDiff.diffDir, 0755)
+	os.MkdirAll(toDiff.diffDir, 0755)
 
 	f, err := os.Create(toDiff.diffPath)
-  if err != nil {
-    return DiffResult{}, err
-  }
+	if err != nil {
+		return DiffResult{}, err
+	}
 
 	writer := bufio.NewWriter(f)
 

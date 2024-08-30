@@ -17,7 +17,7 @@ type ToDiff struct {
 	basePath    string
 	featurePath string
 	diffPath    string
-	diffDir    string
+	diffDir     string
 }
 
 func fileExists(baseDir string, dirEntry fs.DirEntry) bool {
@@ -94,7 +94,7 @@ func GetDiffsFromDirectory(options FromDirectoryOptions) ([]ToDiff, error) {
 				basePath:    options.baseDir + file.Name(),
 				featurePath: options.featureDir + file.Name(),
 				diffPath:    options.diffDir + file.Name(),
-        diffDir: options.diffDir,
+				diffDir:     options.diffDir,
 			}
 			results = append(results, diff)
 		} else if fileExistsInBaseDir {
