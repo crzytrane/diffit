@@ -37,24 +37,27 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 	file1, err := os.Open(toDiff.basePath)
 	defer file1.Close()
 	if err != nil {
-		// TODO change Fatalf to proper error returns, do this for all of them
-		log.Fatalf("can't open image %s %s", toDiff.basePath, err.Error())
+		return DiffResult{}, err
+		// log.Fatalf("can't open image %s %s", toDiff.basePath, err.Error())
 	}
 
 	file2, err := os.Open(toDiff.featurePath)
 	defer file2.Close()
 	if err != nil {
-		log.Fatalf("can't open image %s %s", toDiff.featurePath, err.Error())
+		return DiffResult{}, err
+		// log.Fatalf("can't open image %s %s", toDiff.featurePath, err.Error())
 	}
 
 	image1, _, err := image.Decode(file1)
 	if err != nil {
-		log.Fatalf("Error loading image1 %s\n", err)
+		return DiffResult{}, err
+		// log.Fatalf("Error loading image1 %s\n", err)
 	}
 
 	image2, _, err := image.Decode(file2)
 	if err != nil {
-		log.Fatalf("Error loading image2 %s\n", err)
+		return DiffResult{}, err
+		// log.Fatalf("Error loading image2 %s\n", err)
 	}
 
 	resultDiff := imgdiff.Diff(image1, image2, &imgdiff.Options{
