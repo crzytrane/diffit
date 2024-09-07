@@ -59,11 +59,13 @@ func main() {
 
 	r.Post("/", func(w http.ResponseWriter, r *http.Request) {
 
-		err := decodeArchiveFromRequest(r)
+		baseFilePath, err := decodeArchiveFromRequest(r)
 
-		baseDir := "./uploads/base/"
-		featureDir := "./uploads/feature/"
-		diffDir := "./uploads/diff/"
+		baseDir := fmt.Sprintf("%s/base/", baseFilePath)
+		featureDir := fmt.Sprintf("%s/feature/", baseFilePath)
+		diffDir := fmt.Sprintf("%s/diff/", baseFilePath)
+
+    fmt.Printf("baseFilePath is: %s\n", baseFilePath)
 
 		fromDirectoryOptions := FromDirectoryOptions{
 			baseDir:    baseDir,
@@ -117,6 +119,8 @@ func decodeArchiveFromRequest(r *http.Request) (string, error) {
 	zipPath := fmt.Sprintf("./uploads/%s", header.Filename)
 	dst := fmt.Sprintf("./uploads/extracted/%s/", strings.Replace(header.Filename, ".zip", "", -1))
 
+  fmt.Printf("Return value will be %s\n", dst)
+
 	zipFile, err := os.Create(zipPath)
 	if err != nil {
 		fmt.Printf("Error creating file\n")
@@ -139,12 +143,11 @@ func decodeArchiveFromRequest(r *http.Request) (string, error) {
 
 	for _, f := range archive.File {
 		filePath := filepath.Join(dst, f.Name)
-		fmt.Println("Unzipping file", filePath)
+		// fmt.Println("Unzipping file", filePath)
 
 		// Check for Zip Slip vulnerability
 		if !strings.HasPrefix(filePath, filepath.Clean(dst)+string(os.PathSeparator)) {
-			fmt.Println("Invalid file path")
-			return errors.New("Invalid file path")
+			return "", errors.New("Invalid file path")
 		}
 
 		// Create directories if the entry is a directory
@@ -180,7 +183,7 @@ func decodeArchiveFromRequest(r *http.Request) (string, error) {
 		// todo probably remove these when this is working as intended
 		// fmt.Fprintf(w, "File uploaded successfully: %s", header.Filename)
 
-		fmt.Printf("Filename: %s, size: %s\n", header.Filename, string(header.Size))
+		// fmt.Printf("Filename: %s, size: %s\n", header.Filename, string(header.Size))
 		// todo return something better later on
 	}
 
