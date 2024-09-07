@@ -116,6 +116,8 @@ func decodeArchiveFromRequest(r *http.Request) (string, error) {
 	}
 	defer file.Close()
 
+  err = os.MkdirAll("./uploads/extracted/", os.ModePerm)
+
 	zipPath := fmt.Sprintf("./uploads/%s", header.Filename)
 	dst := fmt.Sprintf("./uploads/extracted/%s/", strings.Replace(header.Filename, ".zip", "", -1))
 
