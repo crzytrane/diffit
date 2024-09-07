@@ -1,10 +1,8 @@
 package main
 
 import (
-	"fmt"
-	"os"
-
 	"bufio"
+	"os"
 
 	"image"
 	_ "image/jpeg"
@@ -73,7 +71,7 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 		CompressionLevel: png.BestSpeed,
 	}
 
-	fmt.Printf("Diff written to: %s\n", toDiff.diffPath)
+	// fmt.Printf("Diff written to: %s\n", toDiff.diffPath)
 
 	os.MkdirAll(toDiff.diffDir, 0755)
 
