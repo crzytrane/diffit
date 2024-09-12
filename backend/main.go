@@ -59,7 +59,6 @@ func main() {
 				return
 			}
 		}
-
 	})
 
 	fmt.Printf("Listening on port %v\n", *port)

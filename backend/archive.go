@@ -18,26 +18,26 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
 		return "", err
 	}
 
-	file, header, err := r.FormFile("file")
+	file, _, err := r.FormFile("file")
 	if err != nil {
 		fmt.Printf("err doing FormFile\n")
 		return "", err
 	}
 	defer file.Close()
 
+  dst, err := os.MkdirTemp("", "extracted-")
+  if err != nil {
+    return "", err
+  }
+  // todo add this back in!
+  // defer os.RemoveAll(dst)
+
+  zipFile, err := os.CreateTemp(dst, "upload-*.zip")
+  // todo add this back in!
+  // defer os.Remove(zipFile.Name())
 	err = os.MkdirAll("./uploads/extracted/", os.ModePerm)
 
-	zipPath := fmt.Sprintf("./uploads/%s", header.Filename)
-	dst := fmt.Sprintf("./uploads/extracted/%s/", strings.Replace(header.Filename, ".zip", "", -1))
-
-	fmt.Printf("Return value will be %s\n", dst)
-
-	zipFile, err := os.Create(zipPath)
-	if err != nil {
-		fmt.Printf("Error creating file\n")
-		return "", err
-	}
-	defer zipFile.Close()
+  fmt.Printf("Tmp dir = %s", dst)
 
 	_, err = io.Copy(zipFile, file)
 	if err != nil {
@@ -45,7 +45,7 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
 		return "", err
 	}
 
-	archive, err := zip.OpenReader(zipPath)
+	archive, err := zip.OpenReader(zipFile.Name())
 	if err != nil {
 		fmt.Printf("Failed to open zip\n")
 		return "", err
