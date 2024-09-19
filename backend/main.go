@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-
 	"flag"
+	"net/http"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"net/http"
 )
 
 func main() {
@@ -52,13 +51,21 @@ func main() {
 			return
 		}
 
-		for _, diff := range files {
-			_, err := DiffImage(diff, DiffOptions{Threshold: 0.1})
+    diffs := make([]DiffResult, len(files))
+		for index, diff := range files {
+			diffResult, err := DiffImage(diff, DiffOptions{Threshold: 0.1})
+      fmt.Printf("Diff %d\n\t- %s\n\t- %s\n\t- %s\n", index, diffResult.Input.basePath, diffResult.Input.featurePath, diffResult.Input.diffPath)
+      diffs[index] = diffResult
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 		}
+
+    diffTest := diffs[0].Input
+    fmt.Printf("diff count %d\n\t- %s\n\t- %s\n\t- %s\n", len(diffs), diffTest.basePath, diffTest.featurePath, diffTest.diffPath)
+
+    archiveData(baseDir, featureDir, diffDir)
 	})
 
 	fmt.Printf("Listening on port %v\n", *port)

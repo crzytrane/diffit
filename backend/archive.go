@@ -37,7 +37,7 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
   // defer os.Remove(zipFile.Name())
 	err = os.MkdirAll("./uploads/extracted/", os.ModePerm)
 
-  fmt.Printf("Tmp dir = %s", dst)
+  fmt.Printf("Tmp dir = %s\n", dst)
 
 	_, err = io.Copy(zipFile, file)
 	if err != nil {
@@ -99,4 +99,34 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
 	}
 
 	return dst, nil
+}
+
+func archiveData(baseDir string, featureDir string, diffDir string) error {
+  // Create a buffer to write our archive to
+
+  // buf := new(bytes.Buffer)
+  //
+  // // Create a new zip archive
+  // w := zip.NewWriter(buf)
+  //
+  // files, err := filepath.Glob(baseDir)
+  // if err != nil {
+  //   return err
+  // }
+
+  return nil
+  // for _, file := range files {
+  //   f, err := w.Create(file.Name)
+  //   if err != nil {
+  //     log.Fatal(err)
+  //   }
+  //   _, err = f.Write([]byte(file.Body))
+  //   if err != nil {
+  //     log.Fatal(err)
+  //   }
+  // }
+  // err := w.Close()
+  // if err != nil {
+  //   log.Fatal(err)
+  // }
 }

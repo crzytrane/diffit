@@ -1,3 +1,6 @@
+/*
+This contains the diffing logic to compare two functions
+*/
 package main
 
 import (
@@ -21,6 +24,12 @@ type DiffOptions struct {
 	Threshold float64
 }
 
+/* 
+Compares two images and gets the differences between them
+If there is a difference it will create a diff file. If images 
+don't exist in the base or in the feature then no diff 
+file will be created
+*/
 func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 	result := DiffResult{
 		Input:   toDiff,
