@@ -1,16 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"cmp"
 	"flag"
+	"fmt"
 	"net/http"
+	"os"
+	"strconv"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
-
-	port := flag.Int("port", 3000, "port to run on")
+	envOrDefaultPort := cmp.Or(os.Getenv("PORT"), "3000")
+  envOrDefaultPortInt, err := strconv.Atoi(envOrDefaultPort)
+  if err != nil {
+    panic("Couldn't convert port number, check that it is a valid value")
+  }
+	port := flag.Int("port", envOrDefaultPortInt, "port to run on")
 	flag.Parse()
 
 	r := chi.NewRouter()
@@ -69,7 +77,7 @@ func main() {
 	})
 
 	fmt.Printf("Listening on port %v\n", *port)
-	err := http.ListenAndServe(fmt.Sprintf(":%v", *port), r)
+	err = http.ListenAndServe(fmt.Sprintf(":%v", *port), r)
 
 	fmt.Printf("Finished: %v", err)
 }
