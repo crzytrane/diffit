@@ -14,10 +14,10 @@ import (
 
 func main() {
 	envOrDefaultPort := cmp.Or(os.Getenv("PORT"), "3000")
-  envOrDefaultPortInt, err := strconv.Atoi(envOrDefaultPort)
-  if err != nil {
-    panic("Couldn't convert port number, check that it is a valid value")
-  }
+	envOrDefaultPortInt, err := strconv.Atoi(envOrDefaultPort)
+	if err != nil {
+		panic("Couldn't convert port number, check that it is a valid value")
+	}
 	port := flag.Int("port", envOrDefaultPortInt, "port to run on")
 	flag.Parse()
 
@@ -59,21 +59,21 @@ func main() {
 			return
 		}
 
-    diffs := make([]DiffResult, len(files))
+		diffs := make([]DiffResult, len(files))
 		for index, diff := range files {
 			diffResult, err := DiffImage(diff, DiffOptions{Threshold: 0.1})
-      fmt.Printf("Diff %d\n\t- %s\n\t- %s\n\t- %s\n", index, diffResult.Input.basePath, diffResult.Input.featurePath, diffResult.Input.diffPath)
-      diffs[index] = diffResult
+			fmt.Printf("Diff %d\n\t- %s\n\t- %s\n\t- %s\n", index, diffResult.Input.basePath, diffResult.Input.featurePath, diffResult.Input.diffPath)
+			diffs[index] = diffResult
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 		}
 
-    diffTest := diffs[0].Input
-    fmt.Printf("diff count %d\n\t- %s\n\t- %s\n\t- %s\n", len(diffs), diffTest.basePath, diffTest.featurePath, diffTest.diffPath)
+		diffTest := diffs[0].Input
+		fmt.Printf("diff count %d\n\t- %s\n\t- %s\n\t- %s\n", len(diffs), diffTest.basePath, diffTest.featurePath, diffTest.diffPath)
 
-    archiveData(baseDir, featureDir, diffDir)
+		archiveData(baseDir, featureDir, diffDir)
 	})
 
 	fmt.Printf("Listening on port %v\n", *port)
