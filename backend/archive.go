@@ -2,6 +2,7 @@ package main
 
 import (
 	"archive/zip"
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -104,15 +105,15 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
 func archiveData(baseDir string, featureDir string, diffDir string) error {
   // Create a buffer to write our archive to
 
-  // buf := new(bytes.Buffer)
-  //
-  // // Create a new zip archive
-  // w := zip.NewWriter(buf)
-  //
-  // files, err := filepath.Glob(baseDir)
-  // if err != nil {
-  //   return err
-  // }
+  buf := new(bytes.Buffer)
+
+  // Create a new zip archive
+  w := zip.NewWriter(buf)
+
+  files, err := filepath.Glob(baseDir)
+  if err != nil {
+    return err
+  }
 
   return nil
   // for _, file := range files {
