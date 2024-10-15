@@ -1,0 +1,23 @@
+.diffContainer {
+  display: grid;
+  grid-template-columns: minmax(400px, 50vw) 100px minmax(400px, 50vw);
+  gap: 1rem;
+}
+
+.diffItemImage {
+  width: 100%;
+}
+
+.diffItem {}
+
+.diffItemForm {
+  /* display: flex; */
+  display: grid;
+  gap: 1rem;
+  grid-area: 1 / 1 / 3 / 1;
+  justify-items: left;
+
+  /* label, input, button {
+    float: left;;
+  } */
+}

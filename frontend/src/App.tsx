@@ -1,22 +1,34 @@
 //import { useState } from 'react'
-import './App.css'
+import styles from './App.module.css'
 
 function App() {
   //const [count, setCount] = useState(0)
 
   return (
     <>
-      <div className='image-container'>
-        <img className='image-item' src="https://place-hold.it/1280x800/0000ff"></img>
-        <button>click me!</button>
-        <img className='image-item' src="https://place-hold.it/1280x800/ff0000"></img>
+      <div className={styles.diffContainer}>
+        <UploadableImage imageURL='https://place-hold.it/1280x800/cc0000' />
+        <div style={{ justifySelf: 'center' }}>Test</div>
+        <UploadableImage imageURL='https://place-hold.it/1280x800/0000cc' />
       </div>
-      <form action="http://localhost:4007/" method="post" encType="multipart/form-data">
+    </>
+  )
+}
+
+type UploadableImageProps = {
+  imageURL: string
+}
+
+function UploadableImage({ imageURL }: UploadableImageProps) {
+  return (
+    <div className={styles.diffItem}>
+      <img src={imageURL} className={styles.diffItemImage} alt="Image to diff"></img>
+      <form action="http://localhost:4007/" method="post" encType="multipart/form-data" className={styles.diffItemForm}>
         <label htmlFor="file">Choose file to upload:</label>
-        <input type="file" id="file" name="file" />
+        <input type="file" name="file" aria-label='image upload' />
         <button type="submit">Upload</button>
       </form>
-    </>
+    </div>
   )
 }
 
