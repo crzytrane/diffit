@@ -26,19 +26,19 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
 	}
 	defer file.Close()
 
-  dst, err := os.MkdirTemp("", "extracted-")
-  if err != nil {
-    return "", err
-  }
-  // todo add this back in!
-  // defer os.RemoveAll(dst)
+	dst, err := os.MkdirTemp("", "extracted-")
+	if err != nil {
+		return "", err
+	}
+	// todo add this back in!
+	// defer os.RemoveAll(dst)
 
-  zipFile, err := os.CreateTemp(dst, "upload-*.zip")
-  // todo add this back in!
-  // defer os.Remove(zipFile.Name())
+	zipFile, err := os.CreateTemp(dst, "upload-*.zip")
+	// todo add this back in!
+	// defer os.Remove(zipFile.Name())
 	err = os.MkdirAll("./uploads/extracted/", os.ModePerm)
 
-  fmt.Printf("Tmp dir = %s\n", dst)
+	fmt.Printf("Tmp dir = %s\n", dst)
 
 	_, err = io.Copy(zipFile, file)
 	if err != nil {
@@ -92,7 +92,7 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
 			return "", err
 		}
 
-		// todo probably remove these when this is working as intended
+		//todo probably remove these when this is working as intended
 		// fmt.Fprintf(w, "File uploaded successfully: %s", header.Filename)
 
 		// fmt.Printf("Filename: %s, size: %s\n", header.Filename, string(header.Size))
@@ -103,31 +103,31 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
 }
 
 func archiveData(baseDir string, featureDir string, diffDir string) error {
-  // Create a buffer to write our archive to
+	// Create a buffer to write our archive to
 
-  buf := new(bytes.Buffer)
+	buf := new(bytes.Buffer)
 
-  // Create a new zip archive
-  w := zip.NewWriter(buf)
+	// Create a new zip archive
+	w := zip.NewWriter(buf)
 
-  files, err := filepath.Glob(baseDir)
-  if err != nil {
-    return err
-  }
+	files, err := filepath.Glob(baseDir)
+	if err != nil {
+		return err
+	}
 
-  return nil
-  // for _, file := range files {
-  //   f, err := w.Create(file.Name)
-  //   if err != nil {
-  //     log.Fatal(err)
-  //   }
-  //   _, err = f.Write([]byte(file.Body))
-  //   if err != nil {
-  //     log.Fatal(err)
-  //   }
-  // }
-  // err := w.Close()
-  // if err != nil {
-  //   log.Fatal(err)
-  // }
+	return nil
+	// for _, file := range files {
+	//   f, err := w.Create(file.Name)
+	//   if err != nil {
+	//     log.Fatal(err)
+	//   }
+	//   _, err = f.Write([]byte(file.Body))
+	//   if err != nil {
+	//     log.Fatal(err)
+	//   }
+	// }
+	// err := w.Close()
+	// if err != nil {
+	//   log.Fatal(err)
+	// }
 }
