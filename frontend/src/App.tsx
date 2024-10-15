@@ -1,33 +1,29 @@
-//import { useState } from 'react'
 import styles from './App.module.css'
 
 function App() {
-  //const [count, setCount] = useState(0)
-
   return (
     <>
-      <div className={styles.diffContainer}>
-        <UploadableImage imageURL='https://place-hold.it/1280x800/cc0000' />
+      <form action="http://localhost:4007/" method="post" encType="multipart/form-data" className={styles.container}>
+        <UploadableImage $name="Base" imageURL='https://place-hold.it/1280x800/cc0000' />
         <div style={{ justifySelf: 'center' }}>Test</div>
-        <UploadableImage imageURL='https://place-hold.it/1280x800/0000cc' />
-      </div>
+        <UploadableImage $name="Other" imageURL='https://place-hold.it/1280x800/0000cc' />
+        <button type="submit" className={styles.containerButton}>Upload</button>
+      </form >
     </>
   )
 }
 
 type UploadableImageProps = {
   imageURL: string
+  $name: string
 }
 
-function UploadableImage({ imageURL }: UploadableImageProps) {
+function UploadableImage({ imageURL, $name }: UploadableImageProps) {
   return (
-    <div className={styles.diffItem}>
-      <img src={imageURL} className={styles.diffItemImage} alt="Image to diff"></img>
-      <form action="http://localhost:4007/" method="post" encType="multipart/form-data" className={styles.diffItemForm}>
-        <label htmlFor="file">Choose file to upload:</label>
-        <input type="file" name="file" aria-label='image upload' />
-        <button type="submit">Upload</button>
-      </form>
+    <div className={styles.image}>
+      <img src={imageURL} alt="Image to diff"></img>
+      <label htmlFor="file">Choose {$name.toLowerCase()} file to upload</label>
+      <input type="file" name={`file-${$name}`} aria-label={`${$name} image upload`} />
     </div>
   )
 }
