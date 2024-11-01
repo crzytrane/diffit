@@ -40,12 +40,21 @@ func main() {
 			return
 		}
 
-		file, _, err := r.FormFile("file")
+		baseFile, _, err := r.FormFile("file-base")
 		if err != nil {
-			fmt.Printf("err doing FormFile\n")
+			fmt.Printf("err uploading base file\n")
 			return
 		}
-		defer file.Close()
+		defer baseFile.Close()
+
+		featureFile, _, err := r.FormFile("file-other")
+		if err != nil {
+			fmt.Printf("err uploading feature file\n")
+			return
+		}
+		defer featureFile.Close()
+
+		http.Redirect(w, r, "http://localhost:5173/", http.StatusFound)
 	})
 
 	r.Post("/api/archive", func(w http.ResponseWriter, r *http.Request) {
