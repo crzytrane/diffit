@@ -1,4 +1,4 @@
-package main
+package diffimage
 
 import (
 	"errors"
@@ -8,16 +8,16 @@ import (
 )
 
 type FromDirectoryOptions struct {
-	baseDir    string
-	featureDir string
-	diffDir    string
+	BaseDir    string
+	FeatureDir string
+	DiffDir    string
 }
 
 type ToDiff struct {
-	basePath    string
-	featurePath string
-	diffPath    string
-	diffDir     string
+	BasePath    string
+	FeaturePath string
+	DiffPath    string
+	DiffDir     string
 }
 
 func fileExists(baseDir string, dirEntry fs.DirEntry) bool {
@@ -66,16 +66,16 @@ func merge[T any](arr1 *[]T, arr2 *[]T) *[]T {
 }
 
 func GetDiffsFromDirectory(options FromDirectoryOptions) ([]ToDiff, error) {
-	allBaseFiles, err := os.ReadDir(options.baseDir)
+	allBaseFiles, err := os.ReadDir(options.BaseDir)
 	if err != nil {
 		errorResult := errors.New("Error loading files from base directory")
 		return []ToDiff{}, errorResult
 	}
 	baseFiles := filterOutDirectories(allBaseFiles)
 
-	allFeatureFiles, err := os.ReadDir(options.featureDir)
+	allFeatureFiles, err := os.ReadDir(options.FeatureDir)
 	if err != nil {
-		fmt.Printf("Error loading files from feature directory %s", options.featureDir)
+		fmt.Printf("Error loading files from feature directory %s", options.FeatureDir)
 		os.Exit(1)
 	}
 	featureFiles := filterOutDirectories(allFeatureFiles)
@@ -85,26 +85,26 @@ func GetDiffsFromDirectory(options FromDirectoryOptions) ([]ToDiff, error) {
 	allFiles := *merge(&baseFiles, &featureFiles)
 
 	for _, file := range allFiles {
-		fileExistsInBaseDir := fileExists(options.baseDir, file)
-		fileExistsInFeatureDir := fileExists(options.featureDir, file)
+		fileExistsInBaseDir := fileExists(options.BaseDir, file)
+		fileExistsInFeatureDir := fileExists(options.FeatureDir, file)
 		fileExistsInBothDirs := fileExistsInBaseDir && fileExistsInFeatureDir
 
 		if fileExistsInBothDirs {
 			diff := ToDiff{
-				basePath:    options.baseDir + file.Name(),
-				featurePath: options.featureDir + file.Name(),
-				diffPath:    options.diffDir + file.Name(),
-				diffDir:     options.diffDir,
+				BasePath:    options.BaseDir + file.Name(),
+				FeaturePath: options.FeatureDir + file.Name(),
+				DiffPath:    options.DiffDir + file.Name(),
+				DiffDir:     options.DiffDir,
 			}
 			results = append(results, diff)
 		} else if fileExistsInBaseDir {
 			diff := ToDiff{
-				basePath: options.baseDir + file.Name(),
+				BasePath: options.BaseDir + file.Name(),
 			}
 			results = append(results, diff)
 		} else if fileExistsInFeatureDir {
 			diff := ToDiff{
-				featurePath: options.featureDir + file.Name(),
+				FeaturePath: options.FeatureDir + file.Name(),
 			}
 			results = append(results, diff)
 		}
@@ -117,9 +117,9 @@ func GetDiffsFromDirectory(options FromDirectoryOptions) ([]ToDiff, error) {
 
 	for _, folder := range allDirs {
 		diff, err := GetDiffsFromDirectory(FromDirectoryOptions{
-			baseDir:    options.baseDir + folder.Name() + "/",
-			featureDir: options.featureDir + folder.Name() + "/",
-			diffDir:    options.diffDir + folder.Name() + "/",
+			BaseDir:    options.BaseDir + folder.Name() + "/",
+			FeatureDir: options.FeatureDir + folder.Name() + "/",
+			DiffDir:    options.DiffDir + folder.Name() + "/",
 		})
 		if err != nil {
 			return nil, err

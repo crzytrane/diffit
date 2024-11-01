@@ -8,6 +8,8 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/crzytrane/diffit/internal/archive"
+	"github.com/crzytrane/diffit/internal/diffimage"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -30,9 +32,24 @@ func main() {
 		w.Write([]byte("Hello world!\n"))
 	})
 
-	r.Post("/", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/api/files", func(w http.ResponseWriter, r *http.Request) {
+		// get files written locally(or do I just keep them in memory 🤔)
+		err := r.ParseMultipartForm(32 << 20) // 32 MB max
+		if err != nil {
+			fmt.Printf("error processing multipart form, err %s\n", err.Error())
+			return
+		}
 
-		baseFilePath, err := unpackArchiveFromRequest(r)
+		file, _, err := r.FormFile("file")
+		if err != nil {
+			fmt.Printf("err doing FormFile\n")
+			return
+		}
+		defer file.Close()
+	})
+
+	r.Post("/api/archive", func(w http.ResponseWriter, r *http.Request) {
+		baseFilePath, err := archive.UnpackArchiveFromRequest(r)
 
 		baseDir := fmt.Sprintf("%s/base/", baseFilePath)
 		featureDir := fmt.Sprintf("%s/feature/", baseFilePath)
@@ -40,10 +57,10 @@ func main() {
 
 		fmt.Printf("baseFilePath is: %s\n", baseFilePath)
 
-		fromDirectoryOptions := FromDirectoryOptions{
-			baseDir:    baseDir,
-			featureDir: featureDir,
-			diffDir:    diffDir,
+		fromDirectoryOptions := diffimage.FromDirectoryOptions{
+			BaseDir:    baseDir,
+			FeatureDir: featureDir,
+			DiffDir:    diffDir,
 		}
 
 		if err != nil {
@@ -52,17 +69,17 @@ func main() {
 			return
 		}
 
-		files, err := GetDiffsFromDirectory(fromDirectoryOptions)
+		files, err := diffimage.GetDiffsFromDirectory(fromDirectoryOptions)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		diffs := make([]DiffResult, len(files))
+		diffs := make([]diffimage.DiffResult, len(files))
 		for index, diff := range files {
-			diffResult, err := DiffImage(diff, DiffOptions{Threshold: 0.1})
-			fmt.Printf("Diff %d\n\t- %s\n\t- %s\n\t- %s\n", index, diffResult.Input.basePath, diffResult.Input.featurePath, diffResult.Input.diffPath)
+			diffResult, err := diffimage.DiffImage(diff, diffimage.DiffOptions{Threshold: 0.1})
+			fmt.Printf("Diff %d\n\t- %s\n\t- %s\n\t- %s\n", index, diffResult.Input.BasePath, diffResult.Input.FeaturePath, diffResult.Input.DiffPath)
 			diffs[index] = diffResult
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -71,9 +88,11 @@ func main() {
 		}
 
 		diffTest := diffs[0].Input
-		fmt.Printf("diff count %d\n\t- %s\n\t- %s\n\t- %s\n", len(diffs), diffTest.basePath, diffTest.featurePath, diffTest.diffPath)
+		fmt.Printf("diff count %d\n\t- %s\n\t- %s\n\t- %s\n", len(diffs), diffTest.BasePath, diffTest.FeaturePath, diffTest.DiffPath)
 
-		archiveData(baseDir, featureDir, diffDir)
+		archive.ArchiveData(baseDir, featureDir, diffDir)
+
+		http.Redirect(w, r, "http://localhost:5173/", http.StatusFound)
 	})
 
 	fmt.Printf("Listening on port %v\n", *port)

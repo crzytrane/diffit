@@ -1,7 +1,7 @@
 /*
 This contains the diffing logic to compare two functions
 */
-package main
+package diffimage
 
 import (
 	"bufio"
@@ -24,10 +24,10 @@ type DiffOptions struct {
 	Threshold float64
 }
 
-/* 
+/*
 Compares two images and gets the differences between them
-If there is a difference it will create a diff file. If images 
-don't exist in the base or in the feature then no diff 
+If there is a difference it will create a diff file. If images
+don't exist in the base or in the feature then no diff
 file will be created
 */
 func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
@@ -36,18 +36,18 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 		IsEqual: false,
 	}
 
-	if (toDiff.basePath != "" && toDiff.featurePath == "") || (toDiff.basePath == "" && toDiff.featurePath != "") {
+	if (toDiff.BasePath != "" && toDiff.FeaturePath == "") || (toDiff.BasePath == "" && toDiff.FeaturePath != "") {
 		return DiffResult{}, nil
 	}
 
-	file1, err := os.Open(toDiff.basePath)
+	file1, err := os.Open(toDiff.BasePath)
 	defer file1.Close()
 	if err != nil {
 		return DiffResult{}, err
 		// log.Fatalf("can't open image %s %s", toDiff.basePath, err.Error())
 	}
 
-	file2, err := os.Open(toDiff.featurePath)
+	file2, err := os.Open(toDiff.FeaturePath)
 	defer file2.Close()
 	if err != nil {
 		return DiffResult{}, err
@@ -82,9 +82,9 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 
 	// fmt.Printf("Diff written to: %s\n", toDiff.diffPath)
 
-	os.MkdirAll(toDiff.diffDir, 0755)
+	os.MkdirAll(toDiff.DiffDir, 0755)
 
-	f, err := os.Create(toDiff.diffPath)
+	f, err := os.Create(toDiff.DiffPath)
 	if err != nil {
 		return DiffResult{}, err
 	}

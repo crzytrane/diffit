@@ -1,8 +1,8 @@
-package main
+package archive
 
 import (
 	"archive/zip"
-	"bytes"
+	// "bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func unpackArchiveFromRequest(r *http.Request) (string, error) {
+func UnpackArchiveFromRequest(r *http.Request) (string, error) {
 	err := r.ParseMultipartForm(32 << 20) // 32 MB max
 	if err != nil {
 		fmt.Printf("error processing multipart form, err %s\n", err.Error())
@@ -102,18 +102,18 @@ func unpackArchiveFromRequest(r *http.Request) (string, error) {
 	return dst, nil
 }
 
-func archiveData(baseDir string, featureDir string, diffDir string) error {
+func ArchiveData(baseDir string, featureDir string, diffDir string) error {
 	// Create a buffer to write our archive to
 
-	buf := new(bytes.Buffer)
+	// buf := new(bytes.Buffer)
 
 	// Create a new zip archive
-	w := zip.NewWriter(buf)
+	// w := zip.NewWriter(buf)
 
-	files, err := filepath.Glob(baseDir)
-	if err != nil {
-		return err
-	}
+	// files, err := filepath.Glob(baseDir)
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 	// for _, file := range files {
