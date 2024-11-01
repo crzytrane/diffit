@@ -1,18 +1,84 @@
-.container {
+.scrollWatcher {
+  height: 2px;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  background-color: lime;
+  width: 100%;
+  scale: 0 1;
+  transform-origin: left;
+  animation: scrollWatcher linear;
+  animation-timeline: scroll();
+}
+
+@keyframes scrollWatcher {
+  to {
+    scale: 1 1;
+  }
+}
+
+.grid {
+  height: 300px;
+  /* min-width: 600px; */
   display: grid;
-  grid-template-columns: minmax(400px, 50vw) 100px minmax(400px, 50vw);
-  grid-template-rows: auto auto;
+  /*grid-template-columns: repeat(4, 1fr);*/
   gap: 1rem;
-
+  border: 1px solid white;
+  justify-self: center;
+  box-sizing: border-box;
+  width: calc(100% - 2px);
 }
 
-.containerButton {
-  grid-area: 2 / 2 / 2 / 2;
+@media (min-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 800px;
+  }
+
+  .gridItem:last-child {
+    grid-column-start: 4;
+    grid-row: 1 / span 2
+  }
+
+  .gridItem2 {
+    grid-column: span 2;
+  }
 }
 
+.gridItem,
+.gridItem2 {
+  background-color: red;
+}
 
-.image {
-  img {
-    width: 100%;
+.gridItem {
+  grid-column: span 1;
+}
+
+.readingGrid {
+  display: grid;
+  justify-self: center;
+  max-width: 300px;
+  gap: 2rem;
+
+  .img {
+    height: 400px;
+    background-color: lime;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .readingGrid {
+    .img {
+      opacity: 0.2;
+      animation: scrollImage linear forwards;
+      animation-timeline: view();
+      animation-range: entry;
+    }
+  }
+
+  @keyframes scrollImage {
+    to {
+      opacity: 1;
+    }
   }
 }

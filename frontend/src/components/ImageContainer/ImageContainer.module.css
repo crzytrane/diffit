@@ -1,0 +1,7 @@
+.imageContainer {
+  &:first-child {
+    background-color: maroon;
+  }
+
+  background-color: red;
+}
