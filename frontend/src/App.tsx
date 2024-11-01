@@ -15,7 +15,7 @@ function App() {
 
   return (
     <>
-      <form action="http://localhost:4007/" method="post" encType="multipart/form-data">
+      <form action="http://localhost:4007/api/files" method="post" encType="multipart/form-data">
         <UploadableImage $name="Base" imageURL='https://place-hold.it/1280x800/cc0000' />
         <div style={{ justifySelf: 'center' }}>Test</div>
         <UploadableImage $name="Other" imageURL='https://place-hold.it/1280x800/0000cc' />
@@ -31,11 +31,12 @@ type UploadableImageProps = {
 }
 
 function UploadableImage({ imageURL, $name }: UploadableImageProps) {
+  const name = $name.toLowerCase();
   return (
     <div>
       {/* <img src={imageURL} alt="Image to diff"></img> */}
-      <label htmlFor="file">Choose {$name.toLowerCase()} file to upload</label>
-      <input type="file" name={`file-${$name}`} aria-label={`${$name} image upload`} />
+      <label htmlFor="file">Choose {name} file to upload</label>
+      <input type="file" name={`file-${name}`} aria-label={`${name} image upload`} />
     </div>
   )
 }
