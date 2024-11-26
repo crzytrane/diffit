@@ -5,6 +5,7 @@ package diffimage
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 
 	"image"
@@ -36,23 +37,25 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 		IsEqual: false,
 	}
 
+	fmt.Print("Starting diff\n")
+
 	if (toDiff.BasePath != "" && toDiff.FeaturePath == "") || (toDiff.BasePath == "" && toDiff.FeaturePath != "") {
 		return DiffResult{}, nil
 	}
 
 	file1, err := os.Open(toDiff.BasePath)
-	defer file1.Close()
 	if err != nil {
+		fmt.Printf("can't open image %s %s", toDiff.BasePath, err.Error())
 		return DiffResult{}, err
-		// log.Fatalf("can't open image %s %s", toDiff.basePath, err.Error())
 	}
+	defer file1.Close()
 
 	file2, err := os.Open(toDiff.FeaturePath)
-	defer file2.Close()
 	if err != nil {
+		fmt.Printf("can't open image %s %s", toDiff.FeaturePath, err.Error())
 		return DiffResult{}, err
-		// log.Fatalf("can't open image %s %s", toDiff.featurePath, err.Error())
 	}
+	defer file2.Close()
 
 	image1, _, err := image.Decode(file1)
 	if err != nil {
@@ -66,21 +69,22 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 		// log.Fatalf("Error loading image2 %s\n", err)
 	}
 
+	fmt.Print("About to do the diff!\n")
+
 	resultDiff := imgdiff.Diff(image1, image2, &imgdiff.Options{
 		Threshold: float64(options.Threshold),
-		DiffImage: false,
+		DiffImage: true,
 	})
 
+	fmt.Print("Diff has been done!\n")
+
 	if resultDiff.Equal {
+		fmt.Print("✅ Images are equal!\n")
 		result.IsEqual = true
 		return result, nil
 	}
 
-	enc := &png.Encoder{
-		CompressionLevel: png.BestSpeed,
-	}
-
-	// fmt.Printf("Diff written to: %s\n", toDiff.diffPath)
+	fmt.Printf("Diff written to: %s\n", toDiff.DiffPath)
 
 	os.MkdirAll(toDiff.DiffDir, 0755)
 
@@ -91,6 +95,9 @@ func DiffImage(toDiff ToDiff, options DiffOptions) (DiffResult, error) {
 
 	writer := bufio.NewWriter(f)
 
+	enc := &png.Encoder{
+		CompressionLevel: png.BestSpeed,
+	}
 	enc.Encode(writer, resultDiff.Image)
 
 	writer.Flush()

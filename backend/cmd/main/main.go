@@ -4,6 +4,8 @@ import (
 	"cmp"
 	"flag"
 	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -12,6 +14,15 @@ import (
 	"github.com/crzytrane/diffit/internal/diffimage"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+
+	"bufio"
+
+	"image"
+	_ "image/jpeg"
+	"image/png"
+	_ "image/png"
+
+	"github.com/n7olkachev/imgdiff/pkg/imgdiff"
 )
 
 func main() {
@@ -40,19 +51,96 @@ func main() {
 			return
 		}
 
-		baseFile, _, err := r.FormFile("file-base")
+		baseUpload, _, err := r.FormFile("file-base")
 		if err != nil {
 			fmt.Printf("err uploading base file\n")
 			return
 		}
-		defer baseFile.Close()
+		defer baseUpload.Close()
 
-		featureFile, _, err := r.FormFile("file-other")
+		otherUpload, _, err := r.FormFile("file-other")
 		if err != nil {
 			fmt.Printf("err uploading feature file\n")
 			return
 		}
-		defer featureFile.Close()
+		defer otherUpload.Close()
+
+		dst, err := os.MkdirTemp("", "extracted-")
+		if err != nil {
+			return
+		}
+
+		baseFile, err := os.CreateTemp(dst, "base-*.png")
+		if err != nil {
+			return
+		}
+		defer baseFile.Close()
+		otherFile, err := os.CreateTemp(dst, "other-*.png")
+		if err != nil {
+			return
+		}
+		defer otherFile.Close()
+		diffFile, err := os.CreateTemp(dst, "diff-*.png")
+		if err != nil {
+			return
+		}
+		defer diffFile.Close()
+
+		_, err = io.Copy(baseFile, baseUpload)
+		if err != nil {
+			fmt.Print("failed to copy base file\n")
+			return
+		}
+		_, err = io.Copy(otherFile, otherUpload)
+		if err != nil {
+			fmt.Print("failed to copy other file\n")
+			return
+		}
+
+		_, err = baseFile.Seek(0, io.SeekStart)
+		if err != nil {
+			fmt.Print("failed to seek files\n")
+			return
+		}
+		_, err = otherFile.Seek(0, io.SeekStart)
+		if err != nil {
+			fmt.Print("failed to seek files\n")
+			return
+		}
+
+		image1, _, err := image.Decode(baseFile)
+		if err != nil {
+			fmt.Print("failed to decode base file\n")
+			return
+		}
+
+		image2, _, err := image.Decode(otherFile)
+		if err != nil {
+			fmt.Print("failed to decode other file\n")
+			return
+		}
+
+		threshold := float64(0.1)
+		resultDiff := *imgdiff.Diff(image1, image2, &imgdiff.Options{
+			Threshold: threshold,
+			DiffImage: false,
+		})
+
+		writer := bufio.NewWriter(diffFile)
+
+		enc := &png.Encoder{
+			CompressionLevel: png.BestSpeed,
+		}
+		err = enc.Encode(writer, resultDiff.Image)
+		if err != nil {
+			fmt.Print("failed to encode diff file\n")
+		}
+		err = writer.Flush()
+		if err != nil {
+			fmt.Print("failed to flush diff file\n")
+		}
+
+		log.Printf("diff path is %s, they are the same %v", diffFile.Name(), resultDiff.Equal)
 
 		http.Redirect(w, r, "http://localhost:5173/", http.StatusFound)
 	})
