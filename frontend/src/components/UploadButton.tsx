@@ -7,10 +7,12 @@ export function UploadButton({ formRef, setDiffImageSrc }: { formRef: React.RefO
             return;
         }
 
+        const uploadUrl = import.meta.env.PROD ? "/api/files" : "http://localhost:4007/api/files";
+
         const formData = new FormData(formRef.current);
         console.log("formData", formData.get("file-base"), formData.get("file-other"));
 
-        fetch('http://localhost:4007/api/files', { method: 'POST', body: formData })
+        fetch(uploadUrl, { method: 'POST', body: formData })
             .then(response => response.arrayBuffer())
             .then(buffer => {
                 const base64String = btoa(
