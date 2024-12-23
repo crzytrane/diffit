@@ -1,43 +1,34 @@
-import appStyles from './App.module.css'
-import { ImageContainer } from './components/ImageContainer/ImageContainer'
+import styles from './App.module.css'
+import { useCallback, useRef, useState } from "react"
+import { UploadButton } from './components/UploadButton'
+import { ImageUpload } from './components/ImageUpload'
 
 function App() {
+  const formRef = useRef<HTMLFormElement>(null)
 
-  // return (
-  //   <>
-  //     <div className={appStyles.grid}>
-  //       <ImageContainer />
-  //       <ImageContainer />
-  //       <ImageControls />
-  //     </div>
-  //   </>
-  // )
+  const [baseImageSrc, setBaseImageSrc] = useState("")
+  const [otherImageSrc, setOtherImageSrc] = useState("")
+  const [diffImageSrc, setDiffImageSrc] = useState("")
+
+  const hasBothImageSrc = baseImageSrc !== "" && otherImageSrc !== ""
+
+  const hasDiffImage = diffImageSrc !== ""
+  const hasNoImage = !hasDiffImage
+
+  const handleClear = useCallback(() => {
+    setBaseImageSrc("")
+    setOtherImageSrc("")
+    setDiffImageSrc("")
+  }, [])
 
   return (
-    <>
-      <form action="http://localhost:4007/api/files" method="post" encType="multipart/form-data">
-        <UploadableImage $name="Base" imageURL='https://place-hold.it/1280x800/cc0000' />
-        <div style={{ justifySelf: 'center' }}>Test</div>
-        <UploadableImage $name="Other" imageURL='https://place-hold.it/1280x800/0000cc' />
-        <button type="submit">Upload</button>
-      </form >
-    </>
-  )
-}
-
-type UploadableImageProps = {
-  imageURL: string
-  $name: string
-}
-
-function UploadableImage({ imageURL, $name }: UploadableImageProps) {
-  const name = $name.toLowerCase();
-  return (
-    <div>
-      {/* <img src={imageURL} alt="Image to diff"></img> */}
-      <label htmlFor="file">Choose {name} file to upload</label>
-      <input type="file" name={`file-${name}`} aria-label={`${name} image upload`} />
-    </div>
+    <form ref={formRef} className={styles.grid}>
+      {hasNoImage && <ImageUpload $name="Base" imgSrc={baseImageSrc} setImageSrc={setBaseImageSrc} />}
+      {hasNoImage && <ImageUpload $name="Other" imgSrc={otherImageSrc} setImageSrc={setOtherImageSrc} />}
+      {hasBothImageSrc && hasNoImage && <UploadButton formRef={formRef} setDiffImageSrc={setDiffImageSrc} />}
+      {diffImageSrc && <img src={diffImageSrc} alt="Diff"></img>}
+      {hasDiffImage && <button type="button" onClick={handleClear}>Clear</button>}
+    </form>
   )
 }
 

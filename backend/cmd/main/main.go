@@ -131,7 +131,15 @@ func main() {
 		enc := &png.Encoder{
 			CompressionLevel: png.BestSpeed,
 		}
-		err = enc.Encode(writer, resultDiff.Image)
+
+		w.Header().Add("Content-Type", "image/png")
+		w.Header().Add("Access-Control-Allow-Origin", "*")
+		w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+
+		w.WriteHeader(http.StatusOK)
+
+		err = enc.Encode(w, resultDiff.Image)
+
 		if err != nil {
 			fmt.Print("failed to encode diff file\n")
 		}
@@ -142,7 +150,11 @@ func main() {
 
 		log.Printf("diff path is %s, they are the same %v", diffFile.Name(), resultDiff.Equal)
 
-		http.Redirect(w, r, "http://localhost:5173/", http.StatusFound)
+		id := r.Header.Get("RequestId")
+		test := fmt.Sprintf("/?diff=%s", id)
+		fmt.Printf("RequestId %s", test)
+
+		// w.Header().Add("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	})
 
 	r.Post("/api/archive", func(w http.ResponseWriter, r *http.Request) {
