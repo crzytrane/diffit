@@ -40,6 +40,8 @@ func main() {
 	r.Use(middleware.RequestID)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Add("Access-Control-Allow-Origin", "*")
+		w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Write([]byte("Hello world!\n"))
 	})
 
