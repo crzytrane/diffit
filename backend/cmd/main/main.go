@@ -25,6 +25,12 @@ import (
 	"github.com/n7olkachev/imgdiff/pkg/imgdiff"
 )
 
+func body(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Write([]byte("Hello world!\n"))
+}
+
 func main() {
 	envOrDefaultPort := cmp.Or(os.Getenv("PORT"), "3000")
 	envOrDefaultPortInt, err := strconv.Atoi(envOrDefaultPort)
@@ -39,11 +45,8 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Add("Access-Control-Allow-Origin", "*")
-		w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Write([]byte("Hello world!\n"))
-	})
+	r.Get("/", body)
+	r.Get("/api/", body)
 
 	r.Post("/api/files", func(w http.ResponseWriter, r *http.Request) {
 		// get files written locally(or do I just keep them in memory 🤔)
