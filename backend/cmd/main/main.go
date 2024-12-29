@@ -45,6 +45,7 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 
+	r.Get("/", body)
 	r.Get("/api/", body)
 	r.Get("/api/health", body)
 
