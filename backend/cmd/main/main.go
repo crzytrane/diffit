@@ -32,7 +32,7 @@ func body(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	envOrDefaultPort := cmp.Or(os.Getenv("PORT"), "3000")
+	envOrDefaultPort := cmp.Or(os.Getenv("PORT"), "8080")
 	envOrDefaultPortInt, err := strconv.Atoi(envOrDefaultPort)
 	if err != nil {
 		panic("Couldn't convert port number, check that it is a valid value")
