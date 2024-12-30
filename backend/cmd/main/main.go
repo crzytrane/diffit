@@ -48,6 +48,7 @@ func main() {
 	r.Get("/", body)
 	r.Get("/api/", body)
 	r.Get("/api/health", body)
+	r.Get("/health", body)
 
 	r.Post("/api/files", func(w http.ResponseWriter, r *http.Request) {
 		// get files written locally(or do I just keep them in memory 🤔)
