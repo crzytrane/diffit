@@ -45,9 +45,12 @@ func main() {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 
+	r.Get("/", body)
 	r.Get("/health", body)
+	r.Get("/api/", body)
+	r.Get("/api/health", body)
 
-	r.Post("/files", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/api/files", func(w http.ResponseWriter, r *http.Request) {
 		// get files written locally(or do I just keep them in memory 🤔)
 		err := r.ParseMultipartForm(32 << 20) // 32 MB max
 		if err != nil {
@@ -161,7 +164,7 @@ func main() {
 		// w.Header().Add("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	})
 
-	r.Post("/archive", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/api/archive", func(w http.ResponseWriter, r *http.Request) {
 		baseFilePath, err := archive.UnpackArchiveFromRequest(r)
 
 		baseDir := fmt.Sprintf("%s/base/", baseFilePath)
