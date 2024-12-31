@@ -7,7 +7,7 @@ export function UploadButton({ formRef, setDiffImageSrc }: { formRef: React.RefO
             return;
         }
 
-        const uploadUrl = import.meta.env.PROD ? "https://diffit-api.markhamilton.dev/api/files" : "http://localhost:4007/api/files";
+        const uploadUrl = import.meta.env.PROD ? "https://diffit-api.markhamilton.dev/files" : "http://localhost:4007/api/files";
 
         const formData = new FormData(formRef.current);
         console.log("formData", formData.get("file-base"), formData.get("file-other"));

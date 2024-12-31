@@ -25,9 +25,13 @@ import (
 	"github.com/n7olkachev/imgdiff/pkg/imgdiff"
 )
 
-func body(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("Access-Control-Allow-Origin", "*")
+func AddCorsHeaders(w http.ResponseWriter) {
+	w.Header().Add("Access-Control-Allow-Origin", "https://diffit-api.markhamilton.dev")
 	w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+}
+
+func body(w http.ResponseWriter, r *http.Request) {
+	AddCorsHeaders(w)
 	w.Write([]byte("Hello world!\n"))
 }
 
@@ -47,10 +51,8 @@ func main() {
 
 	r.Get("/", body)
 	r.Get("/health", body)
-	// r.Get("/api/", body)
-	// r.Get("/api/health", body)
 
-	r.Post("/api/files", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/files", func(w http.ResponseWriter, r *http.Request) {
 		// get files written locally(or do I just keep them in memory 🤔)
 		err := r.ParseMultipartForm(32 << 20) // 32 MB max
 		if err != nil {
@@ -140,8 +142,7 @@ func main() {
 		}
 
 		w.Header().Add("Content-Type", "image/png")
-		w.Header().Add("Access-Control-Allow-Origin", "*")
-		w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		AddCorsHeaders(w)
 
 		w.WriteHeader(http.StatusOK)
 
@@ -160,11 +161,9 @@ func main() {
 		id := r.Header.Get("RequestId")
 		test := fmt.Sprintf("/?diff=%s", id)
 		fmt.Printf("RequestId %s", test)
-
-		// w.Header().Add("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	})
 
-	r.Post("/api/archive", func(w http.ResponseWriter, r *http.Request) {
+	r.Post("/archive", func(w http.ResponseWriter, r *http.Request) {
 		baseFilePath, err := archive.UnpackArchiveFromRequest(r)
 
 		baseDir := fmt.Sprintf("%s/base/", baseFilePath)
