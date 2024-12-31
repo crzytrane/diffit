@@ -26,7 +26,7 @@ import (
 )
 
 func AddCorsHeaders(w http.ResponseWriter) {
-	w.Header().Add("Access-Control-Allow-Origin", "https://diffit-api.markhamilton.dev")
+	w.Header().Add("Access-Control-Allow-Origin", "https://diffit.markhamilton.dev")
 	w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 }
 
