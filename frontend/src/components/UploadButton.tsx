@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import styles from './UploadButton.module.css';
 
 export function UploadButton({ formRef, setDiffImageSrc }: { formRef: React.RefObject<HTMLFormElement>; setDiffImageSrc: React.Dispatch<React.SetStateAction<string>>; }) {
     const handleUpload = useCallback(async () => {
@@ -27,6 +28,6 @@ export function UploadButton({ formRef, setDiffImageSrc }: { formRef: React.RefO
     }, []);
 
     return (
-        <button type="button" onClick={handleUpload}>Upload</button>
+        <button type="button" onClick={handleUpload} className={styles.uploadButton}>Upload</button>
     );
 }
