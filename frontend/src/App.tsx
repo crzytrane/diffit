@@ -2,6 +2,7 @@ import styles from './App.module.css'
 import { useCallback, useRef, useState } from "react"
 import { UploadButton } from './components/UploadButton'
 import { ImageUpload } from './components/ImageUpload'
+import { DiffImageCompareViewer } from './components/DiffImageCompareViewer'
 
 function App() {
   const formRef = useRef<HTMLFormElement>(null)
@@ -26,10 +27,8 @@ function App() {
       {hasNoImage && <ImageUpload $name="Base" imgSrc={baseImageSrc} setImageSrc={setBaseImageSrc} />}
       {hasNoImage && <ImageUpload $name="Other" imgSrc={otherImageSrc} setImageSrc={setOtherImageSrc} />}
       {hasBothImageSrc && hasNoImage && <UploadButton formRef={formRef} setDiffImageSrc={setDiffImageSrc} />}
-      {diffImageSrc && <img src={diffImageSrc} alt="Diff"></img>}
+      {hasDiffImage && <DiffImageCompareViewer diffImageSrc={diffImageSrc} baseImageSrc={baseImageSrc} otherImageSrc={otherImageSrc} />}
       {hasDiffImage && <button type="button" onClick={handleClear} className={styles.clearButton}>Clear</button>}
-      {hasDiffImage && <img src={baseImageSrc} alt="Base image to compare" />}
-      {hasDiffImage && <img src={otherImageSrc} alt="Other image to compare" />}
     </form>
   )
 }
