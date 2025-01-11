@@ -156,11 +156,7 @@ func main() {
 			fmt.Print("failed to flush diff file\n")
 		}
 
-		log.Printf("diff path is %s, they are the same %v", diffFile.Name(), resultDiff.Equal)
-
-		id := r.Header.Get("RequestId")
-		test := fmt.Sprintf("/?diff=%s", id)
-		fmt.Printf("RequestId %s", test)
+		log.Printf("diff path is %s, isEqual: %v", diffFile.Name(), resultDiff.Equal)
 	})
 
 	r.Post("/archive", func(w http.ResponseWriter, r *http.Request) {
