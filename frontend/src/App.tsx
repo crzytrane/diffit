@@ -27,7 +27,7 @@ function App() {
       {hasNoImage && <ImageUpload $name="Other" imgSrc={otherImageSrc} setImageSrc={setOtherImageSrc} />}
       {hasBothImageSrc && hasNoImage && <UploadButton formRef={formRef} setDiffImageSrc={setDiffImageSrc} />}
       {diffImageSrc && <img src={diffImageSrc} alt="Diff"></img>}
-      {hasDiffImage && <button type="button" onClick={handleClear}>Clear</button>}
+      {hasDiffImage && <button type="button" onClick={handleClear} className={styles.clearButton}>Clear</button>}
     </form>
   )
 }
