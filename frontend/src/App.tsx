@@ -28,6 +28,8 @@ function App() {
       {hasBothImageSrc && hasNoImage && <UploadButton formRef={formRef} setDiffImageSrc={setDiffImageSrc} />}
       {diffImageSrc && <img src={diffImageSrc} alt="Diff"></img>}
       {hasDiffImage && <button type="button" onClick={handleClear} className={styles.clearButton}>Clear</button>}
+      {hasDiffImage && <img src={baseImageSrc} alt="Base image to compare" />}
+      {hasDiffImage && <img src={otherImageSrc} alt="Other image to compare" />}
     </form>
   )
 }
