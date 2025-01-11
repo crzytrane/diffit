@@ -38,7 +38,7 @@ export function ImageUpload({ $name, imgSrc, setImageSrc }: UploadableImageProps
         <>
             {imgSrc && <img src={imgSrc} className={styles.image} alt="Image to diff" onClick={handleImageClick} />}
             <input style={hideStyles} type="file" name={`file-${name}`} aria-label={`${name} image upload`} onChange={handleImageChange} ref={inputRef} />
-            <button className={styles.selectButton} style={inputStyles} onMouseDown={handleImageClick}>Select { }</button>
+            <button type="button" className={styles.selectButton} style={inputStyles} onMouseDown={handleImageClick}>Select { }</button>
         </>
     );
 }
