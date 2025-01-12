@@ -4,3 +4,14 @@
     width: fit-content;
     margin: auto;
 }
+
+.baseImage,
+.otherImage,
+.diffImage {
+    grid-area: 'overlap';
+}
+
+.imageGrid {
+    display: 'grid';
+    grid-template-areas: '"overlap"'
+}

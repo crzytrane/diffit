@@ -13,11 +13,12 @@ export function DiffImageCompareViewer({ diffImageSrc, baseImageSrc, otherImageS
     const [showing, setShowing] = useState<Showing>("base-diff");
     return <>
         <button type="button" onClick={() => setShowing("base")} className={styles.baseButton}>Base</button>
-        <button type="button" onClick={() => setShowing("base-diff")} className={styles.diffBaseButton}>Overlay</button>
+        <button type="button" onClick={() => setShowing("base-diff")} className={styles.baseDiffButton}>Overlay</button>
+        <button type="button" onClick={() => setShowing("diff")} className={styles.baseDiffButton}>Diff</button>
         <button type="button" onClick={() => setShowing("other")} className={styles.otherButton}>Other</button>
-        <div style={{ display: 'grid', gridTemplateAreas: '"overlap"' }}>
-            {showing.includes('diff') && <img style={{ gridArea: 'overlap' }} src={diffImageSrc} alt="Diff" />}
-            {showing.includes('base') && <img style={{ gridArea: 'overlap' }} src={baseImageSrc} alt="Base image to compare" />}
-            {showing.includes('other') && <img style={{ gridArea: 'overlap' }} src={otherImageSrc} alt="Other image to compare" />}
+        <div className={styles.grid}>
+            {showing.includes('diff') && <img className={styles.diffImage} src={diffImageSrc} alt="Diff" />}
+            {showing.includes('base') && <img className={styles.baseImage} src={baseImageSrc} alt="Base image to compare" />}
+            {showing.includes('other') && <img className={styles.otherImage} src={otherImageSrc} alt="Other image to compare" />}
         </div></>
 }
