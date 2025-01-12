@@ -8,10 +8,16 @@
 .baseImage,
 .otherImage,
 .diffImage {
-    grid-area: 'overlap';
+    grid-area: overlap;
 }
 
 .imageGrid {
-    display: 'grid';
-    grid-template-areas: '"overlap"'
+    display: grid;
+    grid-template-areas: "'overlap'"
+}
+
+.buttonContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-columns: auto;
 }

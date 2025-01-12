@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/crzytrane/diffit/internal/archive"
 	"github.com/crzytrane/diffit/internal/diffimage"
@@ -25,13 +26,18 @@ import (
 	"github.com/n7olkachev/imgdiff/pkg/imgdiff"
 )
 
-func AddCorsHeaders(w http.ResponseWriter) {
-	w.Header().Add("Access-Control-Allow-Origin", "https://diffit.markhamilton.dev")
+func AddCorsHeaders(w http.ResponseWriter, r *http.Request) {
+	isDev := strings.HasPrefix(r.Host, "localhost")
+	if isDev {
+		w.Header().Add("Access-Control-Allow-Origin", "http://localhost:5173")
+	} else {
+		w.Header().Add("Access-Control-Allow-Origin", "https://diffit.markhamilton.dev")
+	}
 	w.Header().Add("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 }
 
 func body(w http.ResponseWriter, r *http.Request) {
-	AddCorsHeaders(w)
+	AddCorsHeaders(w, r)
 	w.Write([]byte("Hello world!\n"))
 }
 
@@ -142,7 +148,7 @@ func main() {
 		}
 
 		w.Header().Add("Content-Type", "image/png")
-		AddCorsHeaders(w)
+		AddCorsHeaders(w, r)
 
 		w.WriteHeader(http.StatusOK)
 
