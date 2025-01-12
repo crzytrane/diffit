@@ -1,0 +1,6 @@
+.baseButton,
+.otherButton,
+.baseDiffButton {
+    width: fit-content;
+    margin: auto;
+}
