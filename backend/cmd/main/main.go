@@ -10,6 +10,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"encoding/json"
 
 	"github.com/crzytrane/diffit/internal/archive"
 	"github.com/crzytrane/diffit/internal/diffimage"
