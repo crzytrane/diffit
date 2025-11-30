@@ -41,6 +41,21 @@ func body(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello world!\n"))
 }
 
+type healthResponse struct {
+	Status string `json:"status"`
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	resp := healthResponse{Status: "ok"}
+
+	if err := json.NewEncoder(w).Encode(resp); err != nil {
+		http.Error(w, `{"status":"error"}`, http.StatusInternalServerError)
+		return
+	}
+}
+
 func main() {
 	envOrDefaultPort := cmp.Or(os.Getenv("PORT"), "8080")
 	envOrDefaultPortInt, err := strconv.Atoi(envOrDefaultPort)
@@ -56,7 +71,7 @@ func main() {
 	r.Use(middleware.RequestID)
 
 	r.Get("/", body)
-	r.Get("/health", body)
+	r.Get("/health", healthHandler)
 
 	r.Post("/files", func(w http.ResponseWriter, r *http.Request) {
 		// get files written locally(or do I just keep them in memory 🤔)
