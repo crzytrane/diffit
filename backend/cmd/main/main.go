@@ -46,6 +46,7 @@ type healthResponse struct {
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
+	AddCorsHeaders(w, r)
 	w.Header().Set("Content-Type", "application/json")
 
 	resp := healthResponse{Status: "ok"}
