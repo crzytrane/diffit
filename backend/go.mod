@@ -1,6 +1,6 @@
 module github.com/crzytrane/diffit
 
-go 1.24.7
+go 1.25.6
 
 require (
 	github.com/go-chi/chi/v5 v5.1.0
