@@ -1,0 +1,42 @@
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 0;
+}
+
+.button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.button:hover:not(:disabled) {
+  border-color: #646cff;
+  color: #646cff;
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+@media (prefers-color-scheme: light) {
+  .button {
+    border-color: #ccc;
+  }
+
+  .pageInfo {
+    color: rgba(0, 0, 0, 0.5);
+  }
+}

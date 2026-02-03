@@ -1,0 +1,255 @@
+.container {
+  padding: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.createButton {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #646cff;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.createButton:hover {
+  background-color: #535bf2;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  position: relative;
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.cardLink {
+  display: block;
+  padding: 20px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardTitle {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.cardDescription {
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+}
+
+.slug {
+  color: #646cff;
+}
+
+.branch {
+  padding: 2px 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.deleteButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #f44336;
+  background-color: transparent;
+  color: #f44336;
+  font-size: 0.8rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.card:hover .deleteButton {
+  opacity: 1;
+}
+
+.deleteButton:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Modal styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #2a2a2a;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalTitle {
+  margin: 0 0 20px;
+  font-size: 1.5rem;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #1a1a1a;
+  color: inherit;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #646cff;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.error {
+  color: #f44336;
+  margin: 0 0 16px;
+  font-size: 0.9rem;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.cancelButton {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #666;
+  background-color: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.cancelButton:hover {
+  border-color: #888;
+}
+
+.submitButton {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #646cff;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.submitButton:hover:not(:disabled) {
+  background-color: #535bf2;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (prefers-color-scheme: light) {
+  .card {
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+  }
+
+  .cardTitle {
+    color: #213547;
+  }
+
+  .cardDescription {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .branch {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: rgba(0, 0, 0, 0.7);
+  }
+
+  .modal {
+    background-color: #fff;
+  }
+
+  .label {
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .input,
+  .textarea {
+    background-color: #f5f5f5;
+    border-color: #ccc;
+  }
+}
