@@ -1,4 +1,21 @@
 .uploadButton {
-    width: fit-content;
-    margin: auto;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-md);
+  border: none;
+  background-color: var(--color-accent);
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.uploadButton:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+  border-color: transparent;
+}
+
+.uploadButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

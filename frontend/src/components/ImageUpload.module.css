@@ -1,9 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  min-height: 200px;
+}
+
+.dropzone:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-muted);
+}
+
 .image {
-  width: 40vw;
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
 }
 
 .selectButton {
-  height: 3.5rem;
-  width: fit-content;
-  margin: auto;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border: none;
+  background-color: var(--color-accent);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.selectButton:hover {
+  background-color: var(--color-accent-hover);
+  border-color: transparent;
+}
+
+.placeholder {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  text-align: center;
 }
