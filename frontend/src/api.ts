@@ -1,6 +1,5 @@
-const API_BASE = import.meta.env.PROD
-  ? 'https://diffit-api.markhamilton.dev'
-  : 'http://localhost:4007'
+const API_BASE = import.meta.env.VITE_API_URL
+  || (import.meta.env.PROD ? 'https://diffit-api.markhamilton.dev' : 'http://localhost:4007')
 
 async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${endpoint}`, {

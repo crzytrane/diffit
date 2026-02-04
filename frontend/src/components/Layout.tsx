@@ -12,7 +12,8 @@ export function Layout({ children }: LayoutProps) {
     <div className={styles.layout}>
       <header className={styles.header}>
         <Link to="/" className={styles.logo}>
-          DIFFIT
+          <span className={styles.logoIcon} />
+          diffit
         </Link>
         <nav className={styles.nav}>
           <Link
