@@ -1,0 +1,9 @@
+[build]
+builder = "nixpacks"
+
+[build.envs]
+VITE_API_URL = "https://diffit-api.markhamilton.dev"
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 100
