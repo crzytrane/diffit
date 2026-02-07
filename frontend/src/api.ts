@@ -20,7 +20,8 @@ async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> 
 
 // Projects API
 export async function getProjects(page = 1, perPage = 20): Promise<Project[]> {
-  return fetchApi<Project[]>(`/api/projects?page=${page}&per_page=${perPage}`)
+  const response = await fetchApi<PaginatedResponse<Project>>(`/api/projects?page=${page}&per_page=${perPage}`)
+  return response.data
 }
 
 export async function getProject(id: string): Promise<Project> {
@@ -51,7 +52,8 @@ export async function deleteProject(id: string): Promise<void> {
 
 // Builds API
 export async function getBuilds(projectId: string, page = 1, perPage = 20): Promise<Build[]> {
-  return fetchApi<Build[]>(`/api/projects/${projectId}/builds?page=${page}&per_page=${perPage}`)
+  const response = await fetchApi<PaginatedResponse<Build>>(`/api/projects/${projectId}/builds?page=${page}&per_page=${perPage}`)
+  return response.data
 }
 
 export async function getBuild(id: string): Promise<Build> {
@@ -83,7 +85,8 @@ export async function finalizeBuild(id: string): Promise<Build> {
 
 // Snapshots API
 export async function getSnapshots(buildId: string, page = 1, perPage = 50): Promise<Snapshot[]> {
-  return fetchApi<Snapshot[]>(`/api/builds/${buildId}/snapshots?page=${page}&per_page=${perPage}`)
+  const response = await fetchApi<PaginatedResponse<Snapshot>>(`/api/builds/${buildId}/snapshots?page=${page}&per_page=${perPage}`)
+  return response.data
 }
 
 export async function getChangedSnapshots(buildId: string): Promise<Snapshot[]> {
@@ -114,7 +117,8 @@ export function getSnapshotImageUrl(snapshotId: string, imageType: 'base' | 'com
 
 // Baselines API
 export async function getBaselines(projectId: string, page = 1, perPage = 50): Promise<Baseline[]> {
-  return fetchApi<Baseline[]>(`/api/projects/${projectId}/baselines?page=${page}&per_page=${perPage}`)
+  const response = await fetchApi<PaginatedResponse<Baseline>>(`/api/projects/${projectId}/baselines?page=${page}&per_page=${perPage}`)
+  return response.data
 }
 
 export async function getBaseline(id: string): Promise<Baseline> {
