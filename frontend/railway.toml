@@ -5,5 +5,3 @@ builder = "nixpacks"
 VITE_API_URL = "https://diffit-api.markhamilton.dev"
 
 [deploy]
-healthcheckPath = "/health"
-healthcheckTimeout = 100
